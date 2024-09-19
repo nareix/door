@@ -10,6 +10,7 @@ import (
 )
 
 func run() error {
+	// 这里的 192.168.11.192 是你的 IP 地址，需要替换成你自己的
 	l, err := net.Listen("tcp", "192.168.11.192:18022")
 	if err != nil {
 		return err
@@ -31,6 +32,7 @@ func run() error {
 			}
 			if n == 21 &&
 				b[0] == 0x0 && b[1] == 0x11 && b[2] == 0x01 && b[3] == 0x34 && b[4] == 0x01 {
+				// 这里的 11 01 34 01 是门牌号，需要替换成你自己的
 				addr1 := *addr.(*net.UDPAddr)
 				addr1.Port = 6672
 				log.Println("<-", addr, n)
