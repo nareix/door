@@ -1,4 +1,4 @@
-# 室内门禁（AJB-SZ11A）的逆向与改造
+# 室内门禁的逆向与改造（AJB-SZ11A）
 
 https://www.bilibili.com/video/BV1FLWYeLE4B
 
