@@ -1,15 +1,18 @@
 package main
 
 import (
+	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
 	"log"
 	"net"
 	"os"
+	"os/exec"
 	"time"
 )
 
-func run() error {
+func runListen() error {
 	// 这里的 192.168.11.192 是你的 IP 地址，需要替换成你自己的
 	l, err := net.Listen("tcp", "192.168.11.192:18022")
 	if err != nil {
@@ -106,6 +109,43 @@ func run() error {
 			})
 		}(c)
 	}
+}
+
+type IpEntry struct {
+	IfName string `json:"ifname"`
+}
+
+const usbIntfName = "enxe04e7a9631bb"
+
+func usbIntfExists() bool {
+	b, _ := exec.Command("ip", "-j", "a").Output()
+	ips := []IpEntry{}
+	json.Unmarshal(b, &ips)
+	for _, ip := range ips {
+		if ip.IfName == "enxe04e7a9631bb" {
+			return true
+		}
+	}
+	return false
+}
+
+func intfLoop() {
+	for {
+		if usbIntfExists() {
+			exec.Command("bash", "-c", "./setusb.sh")
+			log.Println("setusb")
+		}
+		time.Sleep(time.Second * 3)
+	}
+}
+
+func run() error {
+	checkusb := flag.Bool("checkusb", false, "check usb")
+	flag.Parse()
+	if *checkusb {
+		intfLoop()
+	}
+	return runListen()
 }
 
 func main() {
