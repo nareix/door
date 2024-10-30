@@ -30,7 +30,7 @@ func usbIntfExists() bool {
 func main() {
 	for {
 		if usbIntfExists() {
-			exec.Command("bash", "-c", "./setusb.sh")
+			exec.Command("bash", "-c", "sudo ./setusb.sh").Run()
 			log.Println("setusb")
 		}
 		time.Sleep(time.Second * 3)
